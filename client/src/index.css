@@ -1,7 +1,35 @@
 @import "tailwindcss";
 
+@layer components {
+    .divider {
+    @apply relative flex items-center justify-center my-6 text-sm text-gray-500;
+  }
+
+  .divider::before,
+  .divider::after {
+    content: "";
+    @apply flex-1 border-t border-gray-300;
+  }
+
+  .divider::before {
+    @apply mr-4;
+  }
+
+  .divider::after {
+    @apply ml-4;
+  }
+}
+
 @layer utilities {
     .center {
         @apply flex justify-center items-center;
+    }
+
+    .textbox {
+        @apply bg-white border-2 border-gray-400 rounded-md p-1 px-2 w-full h-10;
+    }
+
+    .button {
+        @apply mx-2 bg-yellow-950 text-amber-50 p-2 px-4 rounded-md;
     }
 }
