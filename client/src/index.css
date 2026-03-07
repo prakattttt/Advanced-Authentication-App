@@ -2,7 +2,8 @@
 
 @theme {
   --breakpoint-mid: 840px;
-  --breakpoint-tiny: 440px;
+  --breakpoint-small: 440px;
+  --breakpoint-tiny: 300px;
 }
 
 @layer components {
