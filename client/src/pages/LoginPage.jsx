@@ -4,7 +4,7 @@ import RightSection from "../components/RightSection";
 
 const LoginPage = () => {
   return (
-    <main className="min-h-screen flex">
+    <main className="min-h-screen flex max-mid:flex-col">
       <LeftSection isLoginPage={true}/>
       <RightSection isLoginPage={true}/>
     </main>

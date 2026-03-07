@@ -25,7 +25,7 @@ const OAuth = () => {
         <span>Or continue with</span>
       </div>
 
-      <div className="flex justify-center gap-4">
+      <div className="flex justify-center gap-4 max-tiny:flex-col">
         {Object.entries(socialConfig).map(([key, value]) => (
           <OAuthBtn
             key={key}
