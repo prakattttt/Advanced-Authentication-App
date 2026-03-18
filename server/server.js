@@ -6,6 +6,7 @@ import errorHandler from "./middlewares/errorHandler.js";
 import notFound from "./middlewares/defaultError.js";
 
 import registerRoute from "./routes/registerRoute.js";
+import loginRoute from "./routes/loginRoute.js";
 
 const app = express();
 
@@ -15,6 +16,7 @@ app.use(urlencoded({extended: false}))
 app.use(express.json());
 
 app.use("/", registerRoute);
+app.use("/", loginRoute);
 
 app.use(notFound);
 

@@ -12,7 +12,7 @@ const UserSchema = new Schema(
       minlength: [3, "Username must be at least 3 characters"],
       maxlength: [20, "Username must be at most 20 characters"],
       validate: {
-        validator: (val) => /^[a-zA-Z0-9_]+$/.test(val), 
+        validator: (val) => /^[a-zA-Z0-9_]+$/.test(val),
         message: "Username can only contain letters, numbers, and underscores",
       },
     },
@@ -32,7 +32,6 @@ const UserSchema = new Schema(
       type: String,
       required: [true, "Password is required!"],
       minlength: [8, "Password must be at least 8 characters"],
-      select: false, 
       validate: {
         validator: (value) =>
           validator.isStrongPassword(value, {
@@ -62,7 +61,7 @@ const UserSchema = new Schema(
       default: false,
     },
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
 UserSchema.pre("save", async function () {
@@ -72,14 +71,28 @@ UserSchema.pre("save", async function () {
 });
 
 UserSchema.statics.createUser = async function (username, email, password) {
-    if(!username || !email || !password) throw new Error("Please enter all of your credientials!");
+  if (!username || !email || !password)
+    throw new Error("Please enter all of your credientials!");
 
-    return await this.create({
-        username,
-        email,
-        password
-    })
-}
+  return await this.create({
+    username,
+    email,
+    password,
+  });
+};
+
+UserSchema.statics.loginUser = async function (email, password) {
+  const user = await this.findOne({ email });
+
+  if (!user)
+    throw new Error(`User with the email ${email} doesn't exist!`, 401);
+
+  const isMatch = await bcrypt.compare(password, user.password);
+
+  if (!isMatch) throw new Error("Invalid password! Please try again!", 401);
+
+  return user;
+};
 
 const Users = model("User", UserSchema);
 
