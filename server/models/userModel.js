@@ -1,6 +1,7 @@
 import { Schema, model } from "mongoose";
 import validator from "validator";
 import bcrypt from "bcrypt";
+import AppError from "../utils/AppError.js";
 
 const UserSchema = new Schema(
   {
@@ -72,7 +73,7 @@ UserSchema.pre("save", async function () {
 
 UserSchema.statics.createUser = async function (username, email, password) {
   if (!username || !email || !password)
-    throw new Error("Please enter all of your credientials!");
+    throw new AppError("Please enter all of your credientials!", 401);
 
   return await this.create({
     username,
@@ -85,11 +86,11 @@ UserSchema.statics.loginUser = async function (email, password) {
   const user = await this.findOne({ email });
 
   if (!user)
-    throw new Error(`User with the email ${email} doesn't exist!`, 401);
+    throw new AppError(`User with the email ${email} doesn't exist!`, 404);
 
   const isMatch = await bcrypt.compare(password, user.password);
 
-  if (!isMatch) throw new Error("Invalid password! Please try again!", 401);
+  if (!isMatch) throw new AppError("Invalid password! Please try again!", 401);
 
   return user;
 };
