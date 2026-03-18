@@ -56,11 +56,6 @@ const UserSchema = new Schema(
         },
       },
     ],
-
-    isVerified: {
-      type: Boolean,
-      default: false,
-    },
   },
   { timestamps: true },
 );
@@ -93,6 +88,18 @@ UserSchema.statics.loginUser = async function (email, password) {
   if (!isMatch) throw new AppError("Invalid password! Please try again!", 401);
 
   return user;
+};
+
+UserSchema.methods.addRefreshToken = async function (refreshToken) {
+  if (!refreshToken) throw new AppError("No refresh token provided!", 403);
+
+  this.refreshTokens = this.refreshTokens.filter(
+    (t) => t.token !== refreshToken
+  );
+
+  this.refreshTokens.push({ token: refreshToken });
+
+  await this.save();
 };
 
 const Users = model("User", UserSchema);

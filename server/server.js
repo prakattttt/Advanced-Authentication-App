@@ -2,6 +2,7 @@ import dotenv from "dotenv/config";
 
 import express, { urlencoded } from "express";
 import connectToDB from "./db/database.js";
+import cookieParser from "cookie-parser";
 import errorHandler from "./middlewares/errorHandler.js";
 import notFound from "./middlewares/defaultError.js";
 
@@ -14,6 +15,8 @@ await connectToDB(process.env.URL);
 
 app.use(urlencoded({extended: false}))
 app.use(express.json());
+
+app.use(cookieParser());
 
 app.use("/", registerRoute);
 app.use("/", loginRoute);
