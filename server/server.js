@@ -1,17 +1,20 @@
 import dotenv from "dotenv/config";
 
-import express from "express";
+import express, { urlencoded } from "express";
 import connectToDB from "./db/database.js";
 import errorHandler from "./middlewares/errorHandler.js";
 import notFound from "./middlewares/defaultError.js";
+
+import registerRoute from "./routes/registerRoute.js";
 
 const app = express();
 
 await connectToDB(process.env.URL);
 
-app.get("/", (req, res) => {
-  res.json({ message: "Demo server!" });
-});
+app.use(urlencoded({extended: false}))
+app.use(express.json());
+
+app.use("/", registerRoute);
 
 app.use(notFound);
 

@@ -65,12 +65,21 @@ const UserSchema = new Schema(
   { timestamps: true }
 );
 
-UserSchema.pre("save", async function (next) {
-  if (!this.isModified("password")) return next();
+UserSchema.pre("save", async function () {
+  if (!this.isModified("password")) return;
 
   this.password = await bcrypt.hash(this.password, 12);
-  next();
 });
+
+UserSchema.statics.createUser = async function (username, email, password) {
+    if(!username || !email || !password) throw new Error("Please enter all of your credientials!");
+
+    return await this.create({
+        username,
+        email,
+        password
+    })
+}
 
 const Users = model("User", UserSchema);
 
