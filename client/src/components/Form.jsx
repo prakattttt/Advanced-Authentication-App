@@ -1,30 +1,21 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import api from "../api.js";
 
 const Form = ({ isLoginPage }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  const [success, setSuccess] = useState("");
+  const navigate = useNavigate();
 
   async function handleSubmit(e) {
     e.preventDefault();
     setError("");
-    setSuccess("");
     setLoading(true);
 
     const formData = new FormData(e.target);
     const username = formData.get("username");
     const email = formData.get("email");
     const password = formData.get("password");
-
-    function displaySuccess(message) {
-      setSuccess(message || "Success!");
-      if (!isLoginPage) {
-        setTimeout(() => {
-          setSuccess("");
-        }, 3000);
-      }
-    }
 
     function displayError(message) {
       setError(message || "Success!");
@@ -36,13 +27,17 @@ const Form = ({ isLoginPage }) => {
     }
 
     try {
+      setLoading(true);
+
       const url = isLoginPage ? "/login" : "/register";
       const response = await api.post(url, { username, email, password });
-      displaySuccess(response.data.message);
-      e.target.reset();
+
+      if (response.status === 200 || response.status === 201) {
+        navigate("/");
+      }
     } catch (err) {
       console.error(err);
-      displayError(err.response?.data?.message);
+      displayError(err.response?.data?.message || "Something went wrong");
     } finally {
       setLoading(false);
     }
@@ -58,7 +53,6 @@ const Form = ({ isLoginPage }) => {
       </p>
 
       {error && <p className="text-red-500">{error}</p>}
-      {success && <p className="text-green-500">{success}</p>}
 
       <form className="flex flex-col my-5" onSubmit={handleSubmit}>
         {!isLoginPage && (

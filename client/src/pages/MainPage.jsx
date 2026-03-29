@@ -1,6 +1,6 @@
 import React from "react";
 import background from "../assets/background.jpg";
-import webDevFacts from "../facts.jsx";
+import webDevFacts from "../utils/facts.jsx";
 import FactCard from "../components/FactCard.jsx";
 
 const MainPage = ({ username = "Prakat" }) => {
