@@ -2,7 +2,7 @@ import React from "react";
 import Element from "./Element";
 import dq from "../assets/dq.svg";
 import profile from "../assets/myprofile.jpg";
-import background from "../assets/background.png";
+import background from "../assets/background.jpg";
 
 const LeftSection = () => {
   return (

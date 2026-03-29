@@ -1,6 +1,6 @@
 import React from "react";
 import LeftSection from "../components/LeftSection";
-import background from "../assets/background.png";
+import background from "../assets/background.jpg";
 import { Link } from "react-router-dom";
 
 const NotFoundPage = () => {
