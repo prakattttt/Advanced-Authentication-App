@@ -18,7 +18,7 @@ export const authenticateUser = (req, res, next) => {
       return next(new AppError("Incorrect User Token!", 403));
     }
 
-    req._id = payload._id;
+    req.id = payload._id;
     next();
   });
 };

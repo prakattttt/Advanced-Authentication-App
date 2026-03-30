@@ -9,6 +9,7 @@ import notFound from "./middlewares/defaultError.js";
 
 import registerRoute from "./routes/registerRoute.js";
 import loginRoute from "./routes/loginRoute.js";
+import mainRoute from "./routes/mainRoute.js"
 
 const app = express();
 
@@ -26,6 +27,7 @@ app.use(cookieParser());
 
 app.use("/", registerRoute);
 app.use("/", loginRoute);
+app.use("/", mainRoute);
 
 app.use(notFound);
 

@@ -36,7 +36,7 @@ const loginUser = catchAsync(async (req, res, next) => {
     sameSite: "Strict",
   });
 
-  res.status(200).json({ message: `${user.username} logged in successfully!` });
+  res.status(200).json({ message: "User logged in successfully!" });
 });
 
 export default loginUser;

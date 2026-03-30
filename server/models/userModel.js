@@ -102,6 +102,16 @@ UserSchema.methods.addRefreshToken = async function (refreshToken) {
   await this.save();
 };
 
+UserSchema.statics.getUsername = async function (_id) {
+  const user = await this.findOne({ _id });
+
+  if(!user) {
+    throw new AppError("User not found in the database!", 400);
+  }
+
+  return user.username;
+}
+
 const Users = model("User", UserSchema);
 
 export default Users;
