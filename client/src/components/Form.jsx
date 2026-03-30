@@ -1,10 +1,12 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import api from "../api.js";
+import { useAuth } from "../context/AuthContext";
 
 const Form = ({ isLoginPage }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+
+  const { login, register } = useAuth();
   const navigate = useNavigate();
 
   async function handleSubmit(e) {
@@ -17,27 +19,16 @@ const Form = ({ isLoginPage }) => {
     const email = formData.get("email");
     const password = formData.get("password");
 
-    function displayError(message) {
-      setError(message || "Success!");
-      if (!isLoginPage) {
-        setTimeout(() => {
-          setError("");
-        }, 3000);
-      }
-    }
-
     try {
-      setLoading(true);
-
-      const url = isLoginPage ? "/login" : "/register";
-      const response = await api.post(url, { username, email, password });
-
-      if (response.status === 200 || response.status === 201) {
-        navigate("/");
+      if (isLoginPage) {
+        await login(email, password);
+      } else {
+        await register(username, email, password);
       }
+
+      navigate("/"); // ✅ go to protected route
     } catch (err) {
-      console.error(err);
-      displayError(err.response?.data?.message || "Something went wrong");
+      setError(err.response?.data?.message || "Something went wrong");
     } finally {
       setLoading(false);
     }
@@ -48,55 +39,17 @@ const Form = ({ isLoginPage }) => {
       <h1 className="text-3xl font-bold">
         {isLoginPage ? "Welcome Back" : "Hello There"}
       </h1>
-      <p className="text-gray-500 my-2">
-        {isLoginPage ? "Sign in to your account" : "Create a new account"}
-      </p>
 
       {error && <p className="text-red-500">{error}</p>}
 
-      <form className="flex flex-col my-5" onSubmit={handleSubmit}>
-        {!isLoginPage && (
-          <>
-            <label className="text-[0.9rem] mb-1 font-semibold">USERNAME</label>
-            <input
-              type="text"
-              placeholder="MyUsername"
-              className="textbox"
-              name="username"
-            />
-          </>
-        )}
+      <form onSubmit={handleSubmit}>
+        {!isLoginPage && <input name="username" placeholder="username" />}
 
-        <label className="text-[0.9rem] mt-4 mb-1 font-semibold">
-          EMAIL ADDRESS
-        </label>
-        <input
-          type="email"
-          placeholder="you@example.com"
-          className="textbox"
-          name="email"
-        />
+        <input name="email" placeholder="email" />
+        <input name="password" placeholder="password" />
 
-        <label className="text-[0.9rem] mt-4 mb-1 font-semibold">
-          PASSWORD
-        </label>
-        <input
-          type="password"
-          placeholder="Enter your password"
-          className="textbox"
-          name="password"
-        />
-
-        <span className="text-[0.8rem] my-2 cursor-pointer text-blue-700">
-          {isLoginPage ? "Forgot Password?" : ""}
-        </span>
-
-        <button
-          type="submit"
-          disabled={loading}
-          className="my-3 bg-blue-800 text-white w-full rounded-md p-3 hover:bg-blue-700 transition ease disabled:opacity-50"
-        >
-          {loading ? "Processing..." : isLoginPage ? "Sign In" : "Register"}
+        <button disabled={loading}>
+          {loading ? "Processing..." : "Submit"}
         </button>
       </form>
     </>
