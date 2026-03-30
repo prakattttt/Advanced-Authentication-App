@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import AuthContext from "../contexts/AuthContext.jsx";
+import api from "../src/api.js"
 
 const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
@@ -8,7 +9,7 @@ const AuthProvider = ({ children }) => {
   useEffect(() => {
     const checkAuth = async () => {
       try {
-        const res = await api.get("/main");
+        const res = await api.get("/");
         setUser(res.data.user);
       } catch (err) {
         setUser(null);
@@ -26,12 +27,11 @@ const AuthProvider = ({ children }) => {
   };
 
   const register = async (username, email, password) => {
-    const res = await api.post("/register", {
+    await api.post("/register", {
       username,
       email,
       password,
     });
-    setUser(res.data.user);
   };
 
   const logout = async () => {

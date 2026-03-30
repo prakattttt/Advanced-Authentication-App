@@ -2,8 +2,10 @@ import React from "react";
 import background from "../assets/background.jpg";
 import webDevFacts from "../utils/facts.jsx";
 import FactCard from "../components/FactCard.jsx";
+import useAuth from "../../hooks/useAuth.jsx";
 
-const MainPage = ({ username = "Prakat" }) => {
+const MainPage = () => {
+  const { user } = useAuth();
   return (
     <main
       role="main"
@@ -24,7 +26,7 @@ const MainPage = ({ username = "Prakat" }) => {
           <h1 className="text-5xl font-bold max-lg:text-3xl max-mid:text-2xl">
             Welcome back,{" "}
             <span className="underline underline-offset-4 decoration-white">
-              {username}
+              {user}
             </span>
             !
           </h1>
