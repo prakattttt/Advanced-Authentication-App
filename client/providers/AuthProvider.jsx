@@ -22,8 +22,7 @@ const AuthProvider = ({ children }) => {
   }, []);
 
   const login = async (email, password) => {
-    const res = await api.post("/login", { email, password });
-    setUser(res.data.user);
+    await api.post("/login", { email, password });
   };
 
   const register = async (username, email, password) => {
