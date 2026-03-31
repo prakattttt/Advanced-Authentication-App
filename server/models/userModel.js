@@ -94,7 +94,7 @@ UserSchema.methods.addRefreshToken = async function (refreshToken) {
   if (!refreshToken) throw new AppError("No refresh token provided!", 403);
 
   this.refreshTokens = this.refreshTokens.filter(
-    (t) => t.token !== refreshToken
+    (t) => t.token !== refreshToken,
   );
 
   this.refreshTokens.push({ token: refreshToken });
@@ -105,12 +105,28 @@ UserSchema.methods.addRefreshToken = async function (refreshToken) {
 UserSchema.statics.getUsername = async function (_id) {
   const user = await this.findOne({ _id });
 
-  if(!user) {
+  if (!user) {
     throw new AppError("User not found in the database!", 400);
   }
 
   return user.username;
-}
+};
+
+UserSchema.statics.removeRefreshToken = async function (token) {
+  const user = await this.findOne({
+    "refreshTokens.token": token,
+  });
+
+  if (!user) return null;
+
+  user.refreshTokens = user.refreshTokens.filter(
+    (t) => t.token !== token
+  );
+
+  await user.save();
+
+  return user;
+};
 
 const Users = model("User", UserSchema);
 
