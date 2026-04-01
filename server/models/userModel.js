@@ -56,6 +56,9 @@ const UserSchema = new Schema(
         },
       },
     ],
+    googleId: String,
+    githubId: String,
+    facebookId: String,
   },
   { timestamps: true },
 );
@@ -119,9 +122,7 @@ UserSchema.statics.removeRefreshToken = async function (token) {
 
   if (!user) return null;
 
-  user.refreshTokens = user.refreshTokens.filter(
-    (t) => t.token !== token
-  );
+  user.refreshTokens = user.refreshTokens.filter((t) => t.token !== token);
 
   await user.save();
 
