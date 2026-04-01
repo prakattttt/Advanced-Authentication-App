@@ -6,15 +6,15 @@ import { FaGithub, FaFacebook } from "react-icons/fa";
 const socialConfig = {
   Google: {
     icon: <FcGoogle />,
-    path: "/google",
+    redirect: "http://localhost:5000/api/auth/google",
   },
   Facebook: {
     icon: <FaFacebook className="text-blue-600" />,
-    path: "/facebook",
+    redirect: "http://localhost:5000/api/auth/facebook",
   },
   Github: {
     icon: <FaGithub />,
-    path: "/github",
+    redirect: "http://localhost:5000/api/auth/github",
   },
 };
 
@@ -31,7 +31,7 @@ const OAuth = () => {
             key={key}
             icon={value.icon}
             label={key}
-            path={value.path}
+            redirect={value.redirect}
           />
         ))}
       </div>

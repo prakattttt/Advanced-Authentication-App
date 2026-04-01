@@ -1,10 +1,10 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-const OAuthBtn = ({ icon, label, path }) => {
+const OAuthBtn = ({ icon, label, redirect }) => {
   return (
     <Link
-      to={path}
+      to={redirect}
       className="flex items-center justify-center gap-3 
                  border border-gray-300 rounded-md 
                  px-4 py-2 w-full
