@@ -8,10 +8,6 @@ const socialConfig = {
     icon: <FcGoogle />,
     redirect: "http://localhost:5000/api/auth/google",
   },
-  Facebook: {
-    icon: <FaFacebook className="text-blue-600" />,
-    redirect: "http://localhost:5000/api/auth/facebook",
-  },
   Github: {
     icon: <FaGithub />,
     redirect: "http://localhost:5000/api/auth/github",

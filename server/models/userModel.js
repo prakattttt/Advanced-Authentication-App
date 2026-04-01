@@ -58,7 +58,6 @@ const UserSchema = new Schema(
     ],
     googleId: String,
     githubId: String,
-    facebookId: String,
   },
   { timestamps: true },
 );

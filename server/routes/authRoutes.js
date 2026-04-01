@@ -23,14 +23,4 @@ router.get(
   }
 );
 
-router.get("/facebook", passport.authenticate("facebook", { scope: ["email"] }));
-
-router.get(
-  "/facebook/callback",
-  passport.authenticate("facebook", { session: false }),
-  (req, res) => {
-    res.redirect("http://localhost:5173");
-  }
-);
-
 export default router;
