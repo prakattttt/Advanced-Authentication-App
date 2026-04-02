@@ -31,17 +31,18 @@ const UserSchema = new Schema(
 
     password: {
       type: String,
-      required: [true, "Password is required!"],
       minlength: [8, "Password must be at least 8 characters"],
       validate: {
-        validator: (value) =>
-          validator.isStrongPassword(value, {
+        validator: (value) => {
+          if (!value) return true;
+          return validator.isStrongPassword(value, {
             minLength: 8,
             minLowercase: 1,
             minUppercase: 1,
             minNumbers: 1,
             minSymbols: 0,
-          }),
+          });
+        },
         message:
           "Password must contain at least one uppercase letter, one lowercase letter, and one number",
       },
@@ -56,6 +57,7 @@ const UserSchema = new Schema(
         },
       },
     ],
+
     googleId: String,
     githubId: String,
   },
@@ -63,30 +65,23 @@ const UserSchema = new Schema(
 );
 
 UserSchema.pre("save", async function () {
-  if (!this.isModified("password")) return;
-
+  if (!this.isModified("password") || !this.password) return;
   this.password = await bcrypt.hash(this.password, 12);
 });
 
 UserSchema.statics.createUser = async function (username, email, password) {
   if (!username || !email || !password)
-    throw new AppError("Please enter all of your credientials!", 401);
+    throw new AppError("Please enter all of your credentials!", 401);
 
-  return await this.create({
-    username,
-    email,
-    password,
-  });
+  return await this.create({ username, email, password });
 };
 
 UserSchema.statics.loginUser = async function (email, password) {
   const user = await this.findOne({ email });
-
   if (!user)
     throw new AppError(`User with the email ${email} doesn't exist!`, 404);
 
   const isMatch = await bcrypt.compare(password, user.password);
-
   if (!isMatch) throw new AppError("Invalid password! Please try again!", 401);
 
   return user;
@@ -98,36 +93,24 @@ UserSchema.methods.addRefreshToken = async function (refreshToken) {
   this.refreshTokens = this.refreshTokens.filter(
     (t) => t.token !== refreshToken,
   );
-
   this.refreshTokens.push({ token: refreshToken });
-
   await this.save();
 };
 
 UserSchema.statics.getUsername = async function (_id) {
   const user = await this.findOne({ _id });
-
-  if (!user) {
-    throw new AppError("User not found in the database!", 400);
-  }
-
+  if (!user) throw new AppError("User not found in the database!", 400);
   return user.username;
 };
 
 UserSchema.statics.removeRefreshToken = async function (token) {
-  const user = await this.findOne({
-    "refreshTokens.token": token,
-  });
-
+  const user = await this.findOne({ "refreshTokens.token": token });
   if (!user) return null;
 
   user.refreshTokens = user.refreshTokens.filter((t) => t.token !== token);
-
   await user.save();
-
   return user;
 };
 
 const Users = model("User", UserSchema);
-
 export default Users;

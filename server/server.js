@@ -10,9 +10,10 @@ import passport from "./config/index.js";
 
 import registerRoute from "./routes/registerRoute.js";
 import loginRoute from "./routes/loginRoute.js";
-import mainRoute from "./routes/mainRoute.js"
-import logoutRoute from "./routes/logoutRoute.js"
-import authRoute from "./routes/authRoutes.js"
+import mainRoute from "./routes/mainRoute.js";
+import logoutRoute from "./routes/logoutRoute.js";
+import authRoute from "./routes/authRoutes.js";
+import refreshRoute from "./routes/refreshRoute.js";
 
 const app = express();
 
@@ -36,6 +37,8 @@ app.use("/", logoutRoute);
 app.use("/", mainRoute);
 
 app.use("/api/auth/", authRoute);
+
+app.use("/", refreshRoute);
 
 app.use(notFound);
 
