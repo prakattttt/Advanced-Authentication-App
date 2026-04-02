@@ -5,7 +5,7 @@ const logoutUser = catchAsync(async (req, res) => {
   const refreshToken = req.cookies.refreshToken;
 
   if (refreshToken) {
-    await User.removeRefreshToken(refreshToken);
+    await Users.removeRefreshToken(refreshToken);
   }
 
   res.clearCookie("jwt");
